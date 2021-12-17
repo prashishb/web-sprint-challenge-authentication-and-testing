@@ -18,7 +18,7 @@ const validateEmptyFields = (req, res, next) => {
 const validateUsername = async (req, res, next) => {
   try {
     const user = await Users.findByUsername(req.body.username);
-    if (!user) {
+    if (user) {
       next({
         status: 401,
         message: 'username taken',

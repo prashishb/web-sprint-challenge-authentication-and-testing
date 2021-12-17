@@ -10,7 +10,7 @@ function findById(id) {
 
 async function add({ username, password }) {
   let created_user_id;
-  await db.transcation(async (trx) => {
+  await db.transaction(async (trx) => {
     const [id] = await trx('users').insert({ username, password });
     created_user_id = id;
   });
