@@ -43,18 +43,25 @@ describe('[POST] /api/auth/register', () => {
 });
 
 describe('[POST] /api/auth/login', () => {
-  // it('responds if username or password missing', async () => {
-  //   const res = await request(server)
-  //     .post('/api/auth/login')
-  //     .send({ username: 'foo' });
-  //   expect(res.status).toBe(400);
-  //   expect(res.body.message).toBe('username and password required');
-  // });
-  // it('responds if invalid credentials', async () => {
-  //   const res = await request(server)
-  //     .post('/api/auth/login')
-  //     .send({ username: 'admin', password: '1234' });
-  //   expect(res.status).toBe(401);
-  //   expect(res.body.message).toBe('invalid credentials');
-  // });
+  it('responds if username or password missing', async () => {
+    const res = await request(server)
+      .post('/api/auth/login')
+      .send({ username: 'foo' });
+    expect(res.status).toBe(400);
+    expect(res.body.message).toBe('username and password required');
+  });
+  it('responds if invalid credentials', async () => {
+    const res = await request(server)
+      .post('/api/auth/login')
+      .send({ username: 'admin', password: '1234' });
+    expect(res.status).toBe(401);
+    expect(res.body.message).toBe('invalid credentials');
+  });
+  it('responds with welcome message on successful login', async () => {
+    const res = await request(server)
+      .post('/api/auth/login')
+      .send({ username: 'admin', password: 'admin' });
+    expect(res.status).toBe(200);
+    expect(res.body.message).toBe('Welcome admin!');
+  });
 });

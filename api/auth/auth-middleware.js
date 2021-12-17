@@ -31,6 +31,18 @@ const validateUsername = async (req, res, next) => {
   }
 };
 
+const hashPassword = (req, res, next) => {
+  const { username, password } = req.body;
+  const rounds = process.env.BCRYPT_ROUNDS || 8;
+  const hash = bcrypt.hashSync(password, rounds);
+
+  req.body = {
+    username,
+    password: hash,
+  };
+  next();
+};
+
 // Validations on Login
 const validateLogin = async (req, res, next) => {
   const { username, password } = req.body;
@@ -54,5 +66,6 @@ const validateLogin = async (req, res, next) => {
 module.exports = {
   validateEmptyFields,
   validateUsername,
+  hashPassword,
   validateLogin,
 };
