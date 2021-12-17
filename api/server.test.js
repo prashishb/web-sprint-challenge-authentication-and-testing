@@ -65,3 +65,31 @@ describe('[POST] /api/auth/login', () => {
     expect(res.body.message).toBe('Welcome admin!');
   });
 });
+
+describe('[GET] /api/jokes', () => {
+  it('responds if token missing', async () => {
+    const res = await request(server).get('/api/jokes');
+    expect(res.status).toBe(401);
+    expect(res.body.message).toBe('token required');
+  });
+  it('responds if invalid token', async () => {
+    let res = await request(server)
+      .post('/api/auth/login')
+      .send({ username: 'foo', password: 'bar' });
+    res = await request(server)
+      .get('/api/jokes')
+      .set('Authorization', { token: 'invalid' });
+    expect(res.status).toBe(401);
+    expect(res.body.message).toBe('token invalid');
+  });
+  it('responds with all jokes', async () => {
+    let res = await request(server)
+      .post('/api/auth/login')
+      .send({ username: 'admin', password: 'admin' });
+    res = await request(server)
+      .get('/api/jokes')
+      .set('Authorization', res.body.token);
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveLength(3);
+  });
+});
