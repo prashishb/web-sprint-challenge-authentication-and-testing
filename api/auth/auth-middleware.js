@@ -31,6 +31,7 @@ const validateUsername = async (req, res, next) => {
   }
 };
 
+// Hash password
 const hashPassword = (req, res, next) => {
   const { username, password } = req.body;
   const rounds = process.env.BCRYPT_ROUNDS || 8;
@@ -43,7 +44,7 @@ const hashPassword = (req, res, next) => {
   next();
 };
 
-// Validations on Login
+// Login validations
 const validateLogin = async (req, res, next) => {
   const { username, password } = req.body;
   const user = await Users.findByUsername(username);
